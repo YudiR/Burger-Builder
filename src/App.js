@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Layout from './components/layout/layout'
+import Layout from './hoc/layout/layout'
 import BurgerBuilder from './containers/burgerBuilder/burgerBuilder'
 
 
