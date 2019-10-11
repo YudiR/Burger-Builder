@@ -4,8 +4,8 @@ import Item from '../item/item'
 const navigation  = (props) => (
 
     <ul className = "Items">
-        <Item link = '/' active> Burger Builder</Item>
-        <Item link = '/' > Checkout</Item>
+        <Item link = '/' > Burger Builder</Item>
+        <Item link = '/orders' > Orders</Item>
 
     </ul>
 
