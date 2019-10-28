@@ -4,7 +4,6 @@ import CheckoutSummary from "../../components/order/checkoutSummary/checkoutSumm
 import ContactData from "./ContactData/contactData";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/index";
 class Checkout extends Component {
   // componentWillMount () {
   //   const query = new URLSearchParams(this.props.location.search)

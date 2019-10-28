@@ -6,13 +6,9 @@ import Spinner from "../../../components/ui/spinner/spinner";
 import Input from "../../../components/ui/input/input";
 import { connect } from "react-redux";
 import withErrorHandler from "../../../hoc/error/error";
-import * as actions from '../../../store/actions/index'
-// name: "",
-// email: "",
-// address: {
-//   street: "",
-//   postalCode: ""
-// }
+import * as actions from "../../../store/actions/index";
+import { updatedObject, isValid } from "../../../shared/utility/utility";
+
 class ContactData extends Component {
   state = {
     form: {
@@ -97,7 +93,7 @@ class ContactData extends Component {
         valid: true
       }
     },
-    formIsValid: false,
+    formIsValid: false
   };
 
   order = event => {
@@ -106,52 +102,37 @@ class ContactData extends Component {
     for (let formElementIdentifier in this.state.form) {
       formData[formElementIdentifier] = this.state.form[formElementIdentifier];
     }
-    console.log(formData, "form data!!!");
 
     const order = {
       ingredients: this.props.ings,
       price: this.props.price,
-      orderData: formData
+      orderData: formData,
+      userId: this.props.userId
     };
-    this.props.onOrderBurger(order)
+    this.props.onOrderBurger(order, this.props.token);
   };
 
-  isValid = (value, rules) => {
-    let isValid = true;
-
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-
-    return isValid;
-  };
+  
 
   inputChange = (event, inputIdentifier) => {
-    console.log(event.target.value, inputIdentifier);
-    const updatedForm = { ...this.state.form };
-    const updatedFormElement = { ...updatedForm[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.isValid(
-      updatedFormElement.value,
-      updatedFormElement.validation
-    );
-    updatedFormElement.touched = true;
-    updatedForm[inputIdentifier] = updatedFormElement;
-    console.log(updatedFormElement);
+
+    const updatedFormElement = updatedObject(this.state.form[inputIdentifier], {
+      value: event.target.value,
+      valid:  isValid(
+        event.target.value,
+        this.state.form[inputIdentifier].validation
+      ),
+      touched: true
+    });
+    const updateForm = updatedObject(this.state.form, {
+      [inputIdentifier]: updatedFormElement
+    });
 
     let formIsValid = true;
-    for (let inputIdentifier in updatedForm) {
-      formIsValid = updatedForm[inputIdentifier].valid && formIsValid;
+    for (let inputIdentifier in updateForm) {
+      formIsValid = updateForm[inputIdentifier].valid && formIsValid;
     }
-    this.setState({ form: updatedForm, formIsValid: formIsValid });
+    this.setState({ form: updateForm, formIsValid: formIsValid });
   };
 
   render() {
@@ -163,9 +144,9 @@ class ContactData extends Component {
       <form onSubmit={this.order}>
         {formArray.map(element => (
           <Input
+            key={element.id}
             touched={element.config.touched}
             invalid={!element.config.valid}
-            key={element.id}
             elementType={element.config.elementType}
             elementConfig={element.config.elementConfig}
             value={element.config.value}
@@ -196,14 +177,21 @@ const mapStateToProps = state => {
   return {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
-    loading: state.order.loading
+    loading: state.order.loading,
+    token: state.auth.idToken,
+    userId: state.auth.userId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderBurger: (orderData) => {dispatch(actions.purchaseBurger(orderData))}
+    onOrderBurger: (orderData, token) => {
+      dispatch(actions.purchaseBurger(orderData, token));
+    }
   };
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(ContactData,axios));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
