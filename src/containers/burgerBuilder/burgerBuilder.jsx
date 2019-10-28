@@ -12,7 +12,7 @@ import error from "../../hoc/error/error";
 import * as action from "../../store/actions/index";
 // '../..components/Burger/controls/controls'
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   constructor(props) {
     super(props);
     this.state = {
