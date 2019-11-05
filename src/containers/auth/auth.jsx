@@ -8,7 +8,9 @@ import * as actions from "../../store/actions/index";
 import { Redirect } from "react-router-dom";
 import { updatedObject, isValid } from "../../shared/utility/utility";
 
-class Auth extends Component {
+
+
+export class Auth extends Component {
   state = {
     controls: {
       email: {
@@ -149,6 +151,7 @@ const mapDispatchToProps = dispatch => {
     onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
   };
 };
+
 
 export default connect(
   mapStateToProps,

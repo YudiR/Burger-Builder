@@ -101,6 +101,7 @@ class ContactData extends Component {
     let formData = {};
     for (let formElementIdentifier in this.state.form) {
       formData[formElementIdentifier] = this.state.form[formElementIdentifier];
+      console.log()
     }
 
     const order = {

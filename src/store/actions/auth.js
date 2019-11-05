@@ -44,10 +44,10 @@ export const auth = (email, password, isSignup) => {
     dispatch(authStart());
 
     let url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=";
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?KEY";
     if (!isSignup) {
       url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?KEY";
     }
     const authData = {
       email: email,

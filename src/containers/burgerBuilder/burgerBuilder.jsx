@@ -106,6 +106,8 @@ export class BurgerBuilder extends Component {
         />
       );
     }
+
+
     return (
       <Aux>
         <Modal show={this.state.purchasing} modalClosed={this.purchaseCancel}>
